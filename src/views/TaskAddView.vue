@@ -15,7 +15,7 @@ const fetchedData = reactive({
     done: false
 })
 
-const settingURL = "http://localhost:6453/task/fetch"
+const settingURL = "https://api.merbot.bookq.xyz/task/fetch"
 
 // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
 // https://stackoverflow.com/questions/5234581/base64url-decoding-via-javascript
@@ -27,7 +27,6 @@ const settingURL = "http://localhost:6453/task/fetch"
 //}
 
 async function fetchSettings() {
-    console.log("auth=" + route.params.auth)
     await fetch(settingURL, {
         method: "POST",
         mode: "cors",

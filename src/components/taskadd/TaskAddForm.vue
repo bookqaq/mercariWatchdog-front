@@ -4,7 +4,7 @@ import { computed, onMounted } from "@vue/runtime-core";
 import ButtonSelector from "./ButtonSelector.vue";
 import PopperAlert from "../popper/PopperAlert.vue";
 
-const submitURL = "http://localhost:3000/task/add"
+const submitURL = "https://api.merbot.bookq.xyz/task/submit"
 
 const props = defineProps({
     taskAddSettings: {
@@ -15,7 +15,7 @@ const props = defineProps({
         type: String,
         required: true
     }
-})
+});
 
 const SubmitProcessing = ref(false);
 
@@ -37,18 +37,17 @@ const TaskAddFormData = reactive({
     mustMatch: [],
     owner: null,
     interval: 3600,
-    priceRange:[-1, 0], 
-    maxpage: 1,
-    auth: props.auth,
+    targetPrice:[-1, 0], 
+    maxPage: 1,
 });
 
 const KeywordsSplitter = computed(() => {
-    let kwtmp = TaskAddFormData.keywords_orig,
-        mustMatchtmp = TaskAddFormData.mustMatch;
-    let kwarr = (kwtmp != "") ? kwtmp.trim(" ").replace(/\uff0c/g, " ").split(" ").filter(x => (x != "")) : null;
-    if (kwarr == null) {
+    if (TaskAddFormData.keywords_orig == "") {
         return null;
     }
+    let kwtmp = TaskAddFormData.keywords_orig,
+        mustMatchtmp = TaskAddFormData.mustMatch;
+    let kwarr = kwtmp.trim(" ").replace(/\uff0c/g, " ").split(" ").filter(x => (x != ""));
 
     mustMatchtmp = mustMatchtmp.filter(v => kwarr.findIndex(i => i == v) >= 0);
 
@@ -59,9 +58,9 @@ const KeywordsSplitter = computed(() => {
 
 const ListenButtonResponse = (res) => {
     let seltmp = TaskAddFormData.mustMatch;
-    if (res.mustMatch && TaskAddFormData.keywords_orig.indexOf(res.text) != -1) {
+    if (res.selected && TaskAddFormData.keywords_orig.indexOf(res.text) != -1) {
         seltmp.push(res.text);
-    } else if (!res.mustMatch) {
+    } else if (!res.selected) {
         seltmp = seltmp.filter(v => v != res.text);
     }
     TaskAddFormData.mustMatch = seltmp;
@@ -83,7 +82,7 @@ async function TaskSubmit() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(TaskAddFormData)
+        body: JSON.stringify({auth: props.auth,data: TaskAddFormData})
     }).then(response => {
         if (response.status >= 400) {
             throw "服务器连接失败了，请私聊告诉我这个问题，非常感谢！";
@@ -145,9 +144,9 @@ async function TaskSubmit() {
                 <div class="mb-3">
                     <label for="minPrice" class="form-label">价格区间</label>
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control" v-model.number="TaskAddFormData.priceRange[0]" placeholder="最低价" aria-label="最低价" min="-1" required>
+                        <input type="number" class="form-control" v-model.number="TaskAddFormData.targetPrice[0]" placeholder="最低价" aria-label="最低价" min="-1" required>
                         <span class="input-group-text">~</span>
-                        <input type="number" class="form-control" v-model.number="TaskAddFormData.priceRange[1]" placeholder="最高价" aria-label="最高价" min="0" required>
+                        <input type="number" class="form-control" v-model.number="TaskAddFormData.targetPrice[1]" placeholder="最高价" aria-label="最高价" min="0" required>
                     </div>
                     <div class="form-text">不修改该默认值则不限制价格</div>
                 </div>
@@ -156,7 +155,7 @@ async function TaskSubmit() {
                 <div class="mb-3">
                     <label for="maxpage" class="form-label">搜索页数</label>
                     <input type="number" class="form-control" id="maxpage" required
-                        v-model.number="TaskAddFormData.maxpage" 
+                        v-model.number="TaskAddFormData.maxPage" 
                         :min="fetchedSettings.settings.pageRange[0]" 
                         :max="fetchedSettings.settings.pageRange[1]">
                     <div class="form-text">限制为{{fetchedSettings.settings.pageRange[0]}}~{{fetchedSettings.settings.pageRange[1]}}</div>
