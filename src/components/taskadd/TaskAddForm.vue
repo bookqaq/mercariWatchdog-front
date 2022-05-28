@@ -4,7 +4,7 @@ import { computed, onMounted } from "@vue/runtime-core";
 import ButtonSelector from "./ButtonSelector.vue";
 import PopperAlert from "../popper/PopperAlert.vue";
 
-const submitURL = "https://api.merbot.bookq.xyz/task/submit"
+const submitURL = "https://merbot-api.bookq.xyz/task/submit"
 
 const props = defineProps({
     taskAddSettings: {
@@ -34,6 +34,7 @@ function alert(message, type) {
 const TaskAddFormData = reactive({
     keywords_orig: "",
     keywords: null,
+    group: null,
     mustMatch: [],
     owner: null,
     interval: 3600,
@@ -90,7 +91,7 @@ async function TaskSubmit() {
         return response.json();
     })
     .then(data => {
-        alert(data.message, data.status == "ok" ? "success" : "warning");
+        alert(data.message, data.status == "success" ? "success" : "warning");
     }).catch(err => alert(err, "danger"));
     SubmitProcessing.value = false;
 }

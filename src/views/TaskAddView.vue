@@ -15,7 +15,7 @@ const fetchedData = reactive({
     done: false
 })
 
-const settingURL = "https://api.merbot.bookq.xyz/task/fetch"
+const settingURL = "https://merbot-api.bookq.xyz/task/fetch"
 
 // https://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
 // https://stackoverflow.com/questions/5234581/base64url-decoding-via-javascript
@@ -40,7 +40,7 @@ async function fetchSettings() {
             console.log(data);
             throw "Failed exit because of auth failure";
         }
-        fetchedData.data = data;
+        fetchedData.data = data.data;
         fetchedData.done = true;
     })
     .catch((err) => {

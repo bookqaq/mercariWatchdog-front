@@ -2,7 +2,7 @@
 
 WIP
 
-This is a frontend for [mercariWatchdog](https://github.com/bookqaq/mercariWatchdog) (update incoming)
+This is a frontend for [mercari-watchdog](https://github.com/bookqaq/mercari-watchdog) (update incoming)
 
 ## IDE Setup
 
