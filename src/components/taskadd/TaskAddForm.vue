@@ -116,7 +116,7 @@ async function TaskSubmit() {
             </div>
             <div class="col align-self-center">
                 <div class="mb-3">
-                    <label for="keyword" class="form-label">关键词{{TaskAddFormData.keywords}} {{TaskAddFormData.mustMatch}}</label>
+                    <label for="keyword" class="form-label">关键词</label>
                     <input type="text" class="form-control" id="Keyword" v-model="TaskAddFormData.keywords_orig" required>
                     <div class="form-text">请使用半角空格或中文逗号进行分隔</div>
                 </div>

@@ -1,6 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue';
+import IsItANavBar from './components/IsItANavBar.vue';
 </script>
 
 <template>
@@ -8,12 +8,11 @@ import HelloWorld from './components/HelloWorld.vue';
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+      <IsItANavBar msg="" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink to="/task/add">Add Task</RouterLink>
+        <RouterLink to="/" :v-bind="disabled">主页(施工中)</RouterLink>
+        <RouterLink to="/task/add">添加任务</RouterLink>
       </nav>
     </div>
   </header>
